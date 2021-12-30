@@ -1,0 +1,52 @@
+(ql:quickload :ltk)
+(ql:quickload "nodgui")
+(in-package :ltk-user)
+
+(with-ltk ()
+  (let* ((button1 (make-instance 'button
+				 :text "hello: Dick Barends"
+				 :command (lambda () (format t "gedrukt1"))))
+	 (button2 (make-instance 'button
+				 :text "hello: Dick Barends"
+				 :command (lambda () (format t "gedrukt2"))))
+	 (canvas (make-instance 'canvas
+				:background :black
+				:height 200
+				:width 200
+				:scrollregion "{0 0 1000 1000}"))
+	 (sb1 (make-scrollbar 'scrollY
+			       :orientation :vertical))
+	 (line1 (create-line canvas (dck-plot))))
+    (grid button1 0 0)
+    (grid button2 0 1 :sticky "e")
+    (grid canvas 1 1)
+    (itemconfigure canvas line1 "smooth" "bezier")
+    (itemconfigure canvas line1 "fill" "red")))
+
+
+(defun dck-plot ()
+  (let ((lijst nil))
+    (do ((tijd -10 (1+ tijd)))
+	((> tijd 10) lijst)
+      (push (- 100 (* tijd tijd)) lijst)
+      (push (+ 100 (* 10 tijd)) lijst))))
+
+
+(let ((x 10))
+  x)
+
+(defun canvastest()
+  (with-ltk ()
+    (let* ((sc (make-scrolled-canvas NIL))
+	   (c (canvas sc))
+	   (line (create-line c (list 100 100 400 50 700 150)))
+	   (polygon (create-polygon c (list 50 150 250 160 250 300 50 330 )))
+	   (text (create-text c 260 250 "Canvas test")))
+      (pack sc :expand 1 :fill :both)
+      (scrollregion c 0 0 800 800) )))
+
+
+;;(nodgui.demo:demo )
+
+
+;; export PATH="/usr/local/opt/tcl-tk/bin:$PATH"' >> ~/.zshrc
